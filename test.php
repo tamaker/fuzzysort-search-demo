@@ -28,7 +28,7 @@
         
             var list= [];
             // THE ARRAY OUR SEARCHABLE CONTENT WILL BE PUSHED TO
-            $.getJSON( 'https://cdn.jsdelivr.net/gh/tamaker/fusejs-demo@master/got.js', function( data ) {
+            $.getJSON( 'https://cdn.jsdelivr.net/gh/tamaker/fuzzysort-search-demo@master/data.js', function( data ) {
                 //console.log(data); //json output 
 
                 $(data[0].characters).each(function (i, val) {
