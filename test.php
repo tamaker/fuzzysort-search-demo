@@ -14,12 +14,12 @@
 
     <style>
         #inner ul { list-style-type: none; }
-        .charImages { border: 1px solid block; border-radius: 50%; width: 80px; height: 80px; }
+        .charImages { border: 1px solid black; border-radius: 50%; width: 80px; height: 80px; }
         .item-text { 
             min-height: 100px;
             display: inline-flex;
             align-items: center;
-            border: 1px solid aqua;
+            border: 0px solid black;
         }
     </style>
 
@@ -28,26 +28,33 @@
         
             var list= [];
             // THE ARRAY OUR SEARCHABLE CONTENT WILL BE PUSHED TO
-            $.getJSON( 'https://cdn.jsdelivr.net/gh/tamaker/fuzzysort-search-demo@master/data.js', function( data ) {
+            //$.getJSON( 'https://cdn.jsdelivr.net/gh/tamaker/fuzzysort-search-demo@master/data.js', function( data ) {
+            $.getJSON( './data.js', function( data ) {
                 //console.log(data); //json output 
 
                 $(data[0].characters).each(function (i, val) {
                     //console.log(val)
                     //$(this).attr("id", "item-" + i);
-                    newObj = { itemNum: i, itemText: (val.houseName + ' - ' + val.characterName), itemPic: val.characterImageThumb  };
+                    var houseName = '';
+                    if (val.houseName){
+                        houseName = val.houseName + ' - ';
+                    }
+                    newObj = { itemNum: i, itemText: (houseName +  val.characterName), itemPic: val.characterImageThumb  };
                     list.push(newObj);
 
                     
                     if (val.characterImageThumb){
-                            $('#inner ul').append('<li class="item-' + i + '"><span class="item-text">' + val.characterName + '</span></li>');
+                            $('#inner ul').append('<li class="item-' + i + '"><span class="item-text">' + val.characterName + ' [ House: ' + val.houseName + ']</span></li>');
                             $('.item-' + i).prepend('<img class="charImages" src="' + val.characterImageThumb + '">')
                     }
                     
                 });
 
-                console.log(list);
+                
 
             });
+            
+            //console.log(list);
 
             // ITERATE THROUGH ALL THE P ELEMENTS AND PUSH THE JSON OBJECT
             //WITH CONTENT AND IDX NUMBER TO THE ARRAY
@@ -61,7 +68,7 @@
 
 
             function doSearch(searchVal) {
-                $('li').hide();
+                $('li').css('display', 'none')
                 console.log('doing search');
 
                 
@@ -80,25 +87,27 @@
                 console.log(results);
                 highlight(searchVal);
                 
-                /*
-                // When using multiple `keys`, results are different. They're indexable to get each normal result
-                fuzzysort.highlight(bestResult[0]) // 'Google <b>Chr</b>ome'
-                fuzzysort.highlight(bestResult[1]) // 'Launch <b>Chr</b>ome'
-                bestResult.obj.title // 'Google Chrome'
-                */
 
+                if (results.length){
+                    $(results).each(function(i, val){
+                        //console.log('show item #' + val.obj.itemNum);
+                        //console.log(val.obj);
+                        //console.log('--------------------------')
 
+                            if (val.obj.itemNum){
+                                    $('li.item-'+(val.obj.itemNum).toString()).show();
+                                    console.log('li.item-' + val.obj.itemNum)
+                            }
+                            
+                    })
+
+                } else {
+
+                    $('li').show()
+
+                }
                 
 
-
-                
-                $(results).each(function(i, val){
-                    console.log('show item #' + val.obj.itemNum);
-                    setTimeout(function(){
-                        $('li.item-' + val.obj.itemNumm).show();
-                    }, 5000)
-                    
-                })
 
             }
 
