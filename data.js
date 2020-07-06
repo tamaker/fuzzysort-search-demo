@@ -1,4 +1,4 @@
-var list = [{
+[{
     "characters":[
        {
           "characterName":"Addam Marbrand",
